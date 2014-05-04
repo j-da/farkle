@@ -102,6 +102,9 @@ socket.on 'farkle', () ->
   ractive.set 'myTurn', false
 
 socket.on 'turnover', (data) ->
+  ractive.set 'oldValue', 0
+  ractive.set 'turnValue', 0
+  ractive.set 'diceValue', 0
   ractive.set 'info', "Your turn ended successfully."
   ractive.set 'myTurn', false
 

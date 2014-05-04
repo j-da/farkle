@@ -321,6 +321,9 @@
   });
 
   socket.on('turnover', function(data) {
+    ractive.set('oldValue', 0);
+    ractive.set('turnValue', 0);
+    ractive.set('diceValue', 0);
     ractive.set('info', "Your turn ended successfully.");
     return ractive.set('myTurn', false);
   });
