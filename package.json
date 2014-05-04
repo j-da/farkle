@@ -1,0 +1,23 @@
+{
+  "name": "farkle",
+  "version": "0.0.1",
+  "description": "Multiplayer farkle using sockets",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "~2.14.5",
+    "socket.io": "~0.9.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "sockets",
+    "farkle",
+    "game",
+    "multiplayer"
+  ],
+  "author": "James Daly",
+  "license": "MIT"
+}

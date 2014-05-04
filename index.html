@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang='en-GB'>
+<head>
+  <meta charset='utf-8'>
+  <title>Farkle</title>
+
+  <link rel='stylesheet' href='http://yui.yahooapis.com/pure/0.4.2/pure-min.css'>
+
+  <style>
+    #container {
+      margin: auto;
+      max-width: 80%;
+      padding: 0 1em;
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 2.5em;
+    }
+
+    .id {
+      font-size: 0.7em;
+      color: #999;
+    }
+
+    button {
+      margin-bottom: 0.25em;
+    }
+
+    .lb-name {
+      text-align: left;
+    }
+
+    .lb-score {
+      text-align: right;
+    }
+
+    .pure-table, .pure-table * {
+      border: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id='container'></div>
+
+  <script id='template' type='text/ractive'>
+    <h1>Farkle</h1>
+
+    {{#state === 'waiting'}}
+      <p>Waiting for server...</p>
+    {{/state}}
+    
+    {{#state === 'entry'}}
+      <label for='myName'>Hey there fella. What is your name?&emsp;</label>
+      <input id='myName' on-enter-change='setname' autofocus>
+    {{/state}}
+    
+    {{#role === 'spectator'}}
+      <p>You are not in the current game, {{myName}}&nbsp;<code class='id'>{{myId}}</code>.</p>
+    {{/role}}
+
+    {{#role === 'player'}}
+      <p>You are in the current game, {{myName}}&nbsp;<code class='id'>{{myId}}</code>.</p>
+    {{/role}}
+
+    {{#state === 'game' || state === 'foyer'}}
+      <p id='info'>{{{info}}}</p>
+
+      <div class='pure-g-r'>
+      {{#state === 'foyer'}}
+        <div class='pure-u-12-24'>
+          <h3>Foyer</h3>
+          <label for="startGame">The game is waiting to start.</label>&emsp;
+          <button id='startGame' class='pure-button pure-button-primary' on-click='startgame' autofocus>Commence play</button>
+        </div>
+      {{/state}}
+      {{#state === 'game'}}
+        <div class='pure-u-12-24'>
+          <h3>{{#myTurn}}Your{{/myTurn}}{{^myTurn}}Their{{/myTurn}} Turn</h3>
+          <form class='pure-form pure-form-stacked'>
+            <div class='pure-control-group'>
+            {{#dice:i}}
+              <button type='button' class='pure-button {{^myTurn}}pure-button-disabled{{/myTurn}} {{#s}}pure-button-active{{/s}}' data-i='{{i}}' on-click='selectdie'>{{n}}</button>
+            {{/dice}}
+            </div>
+            <div class='pure-control-group'>
+              {{#diceValue > 0}}
+                <button type='button' class='pure-button pure-button-primary {{^myTurn}}pure-button-disabled{{/myTurn}}' on-click='submitdice'>Risk for +{{diceValue}}</button>
+              {{/diceValue}}
+              <button type='button' class='pure-button pure-button-primary {{^myTurn}}pure-button-disabled{{/myTurn}}' on-click='endturn'>End turn with {{turnValue}}</button>
+            </div>
+          </form>
+        </div>
+      {{/state}}
+        <div class='pure-u-12-24'>
+          <h3>Leaderboard</h3>
+          <center>
+            <table class='pure-table'>
+              <tbody>
+              {{#players}}
+                <tr>
+                  <td class='lb-name'>{{name}}&nbsp;<code class='id'>{{id.slice(0, 6)}}</code></td>
+                  <td class='lb-score'>{{score}}</td>
+                </tr>
+              {{/players}}
+              </tbody>
+            </table>
+          </center>
+        </div>
+      </div>
+    {{/state}}
+  </script>
+
+  <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+  <script src='/socket.io/socket.io.js'></script>
+
+  <script src='client.js'></script>
+</body>
+</html>
