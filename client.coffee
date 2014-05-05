@@ -97,6 +97,9 @@ socket.on 'continue', (data) ->
   ractive.set 'info', "Your score is #{data.score}, of which you are risking #{data.risk}"
 
 socket.on 'farkle', () ->
+  ractive.set 'oldValue', 0
+  ractive.set 'turnValue', 0
+  ractive.set 'diceValue', 0
   ractive.set 'info', "You farkled!"
   ractive.set 'myTurn', false
 
