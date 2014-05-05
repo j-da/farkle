@@ -4,6 +4,9 @@ connect = require('connect')
 server = connect.createServer(connect.static(__dirname)).listen(port)
 io = require('socket.io').listen(server)
 
+io.configure 'production', () ->
+  io.set 'transports', ['xhr-polling']
+
 getDiceScore = (str) ->
   switch str
     when '5' then return 50

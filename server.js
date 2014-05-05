@@ -10,6 +10,10 @@
 
   io = require('socket.io').listen(server);
 
+  io.configure('production', function() {
+    return io.set('transports', ['xhr-polling']);
+  });
+
   getDiceScore = function(str) {
     switch (str) {
       case '5':
