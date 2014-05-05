@@ -94,7 +94,7 @@
       case '11155':
         return 600;
       case '114445':
-      case '5556':
+      case '5666':
         return 650;
       case '1666':
       case '55666':
@@ -354,6 +354,24 @@
       };
     }));
     return ractive.set('info', data.info);
+  });
+
+  socket.on('gameover', function(data) {
+    var p, _i, _j, _len, _len1, _ref;
+    for (_i = 0, _len = players.length; _i < _len; _i++) {
+      p = players[_i];
+      players.pop();
+    }
+    _ref = data.leaders;
+    for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+      p = _ref[_j];
+      players.push({
+        id: p.id,
+        name: p.name,
+        score: p.score
+      });
+    }
+    return ractive.set('state', 'afterparty');
   });
 
   ractive.on({

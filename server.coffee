@@ -18,7 +18,7 @@ getDiceScore = (str) ->
     when '111', '555', '11333', '133355', '1444', '44455' then return 500
     when '1133355', '14445', '1115' then return 550
     when '666', '11444', '144455', '1555', '11155' then return 600
-    when '114445', '5556' then return 650
+    when '114445', '5666' then return 650
     when '1666', '55666' then return 700
     when '15666' then return 750
     when '11666' then return 800
@@ -160,4 +160,12 @@ io.sockets.on 'connection', (socket) ->
 
     current = (current + 1) % players.length
     socket.emit 'turnover', {score: players[current].score}
+
+    if current is 0
+      leaders = players.slice 0
+      leaders.sort((a, b) -> return b.score - a.score)
+      if leaders[0].score >= 10000
+        io.sockets.emit 'gameover', {leaders: leaders}
+        return
+
     io.sockets.socket(players[current].id).emit 'yourturn', {dice: players[current].dice}

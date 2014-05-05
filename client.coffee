@@ -32,7 +32,7 @@ getDiceScore = (str) ->
     when '111', '555', '11333', '133355', '1444', '44455' then return 500
     when '1133355', '14445', '1115' then return 550
     when '666', '11444', '144455', '1555', '11155' then return 600
-    when '114445', '5556' then return 650
+    when '114445', '5666' then return 650
     when '1666', '55666' then return 700
     when '15666' then return 750
     when '11666' then return 800
@@ -119,6 +119,13 @@ socket.on 'update', (data) ->
   ractive.set 'dice', data.dice.map (el) ->
     return {n: el, s: false}
   ractive.set 'info', data.info
+
+socket.on 'gameover', (data) ->
+  for p in players
+    players.pop()
+  for p in data.leaders
+    players.push {id: p.id, name: p.name, score: p.score}
+  ractive.set 'state', 'afterparty'
 
 ractive.on
   setname: (e) ->

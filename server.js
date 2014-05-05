@@ -62,7 +62,7 @@
       case '11155':
         return 600;
       case '114445':
-      case '5556':
+      case '5666':
         return 650;
       case '1666':
       case '55666':
@@ -353,7 +353,7 @@
       }
     });
     return socket.on('endturn', function(data) {
-      var d, d2, ds, i, _i, _j, _k, _ref, _ref1, _ref2;
+      var d, d2, ds, i, leaders, _i, _j, _k, _ref, _ref1, _ref2;
       d = data.dice.filter(function(el) {
         return el.s;
       });
@@ -391,6 +391,18 @@
       socket.emit('turnover', {
         score: players[current].score
       });
+      if (current === 0) {
+        leaders = players.slice(0);
+        leaders.sort(function(a, b) {
+          return b.score - a.score;
+        });
+        if (leaders[0].score >= 10000) {
+          io.sockets.emit('gameover', {
+            leaders: leaders
+          });
+          return;
+        }
+      }
       return io.sockets.socket(players[current].id).emit('yourturn', {
         dice: players[current].dice
       });

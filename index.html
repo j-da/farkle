@@ -63,7 +63,7 @@
       <p>You are in the current game, {{myName}}&nbsp;<code class='id'>{{myId}}</code>.</p>
     {{/role}}
 
-    {{#state === 'game' || state === 'foyer'}}
+    {{#state === 'game' || state === 'foyer' || state === 'afterparty'}}
       <p id='info'>{{{info}}}</p>
 
       <div class='pure-g-r'>
@@ -72,6 +72,12 @@
           <h3>Foyer</h3>
           <label for="startGame">The game is waiting to start.</label>&emsp;
           <button id='startGame' class='pure-button pure-button-primary' on-click='startgame' autofocus>Commence play</button>
+        </div>
+      {{/state}}
+      {{#state === 'afterparty'}}
+        <div class='pure-u-12-24'>
+          <h3>Game Over</h3>
+          <em>The winner is {{players[0].name}}&nbsp;<code class='id'>{{players[0].id}}.</em>
         </div>
       {{/state}}
       {{#state === 'game'}}
