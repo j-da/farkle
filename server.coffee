@@ -121,6 +121,11 @@ io.sockets.on 'connection', (socket) ->
           players[current].dice.push 6
         for i in [0...players[current].dice.length]
           players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1
+
+        while getFarkle(players[current].dice.join '')
+          for i in [0...players[current].dice.length]
+            players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1
+
         io.sockets.emit 'update', 
           info: "#{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code> farkled!"
           dice: players[current].dice

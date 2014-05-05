@@ -291,7 +291,7 @@
       return _results;
     });
     socket.on('submitdice', function(data) {
-      var cheater, d, d2, ds, i, _i, _j, _k, _l, _m, _ref, _ref1, _ref2, _ref3;
+      var cheater, d, d2, ds, i, _i, _j, _k, _l, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4;
       d = data.dice.filter(function(el) {
         return el.s;
       });
@@ -342,6 +342,11 @@
           }
           for (i = _m = 0, _ref3 = players[current].dice.length; 0 <= _ref3 ? _m < _ref3 : _m > _ref3; i = 0 <= _ref3 ? ++_m : --_m) {
             players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1;
+          }
+          while (getFarkle(players[current].dice.join(''))) {
+            for (i = _n = 0, _ref4 = players[current].dice.length; 0 <= _ref4 ? _n < _ref4 : _n > _ref4; i = 0 <= _ref4 ? ++_n : --_n) {
+              players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1;
+            }
           }
           io.sockets.emit('update', {
             info: "" + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code> farkled!",
