@@ -315,6 +315,9 @@
   });
 
   socket.on('farkle', function() {
+    ractive.set('oldValue', 0);
+    ractive.set('turnValue', 0);
+    ractive.set('diceValue', 0);
     ractive.set('info', "You farkled!");
     return ractive.set('myTurn', false);
   });
