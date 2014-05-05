@@ -353,7 +353,7 @@
       }
     });
     return socket.on('endturn', function(data) {
-      var d, d2, ds, i, leaders, _i, _j, _k, _ref, _ref1, _ref2;
+      var d, d2, ds, i, leaders, _i, _j, _k, _l, _ref, _ref1, _ref2, _ref3;
       d = data.dice.filter(function(el) {
         return el.s;
       });
@@ -378,6 +378,11 @@
         }
         for (i = _k = 0, _ref2 = players[current].dice.length; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; i = 0 <= _ref2 ? ++_k : --_k) {
           players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1;
+        }
+        while (getFarkle(players[current].dice.join(''))) {
+          for (i = _l = 0, _ref3 = players[current].dice.length; 0 <= _ref3 ? _l < _ref3 : _l > _ref3; i = 0 <= _ref3 ? ++_l : --_l) {
+            players[current].dice[i] = Math.floor(Math.random() * 5.99) + 1;
+          }
         }
         players[current].score += d2;
         players[current].risk = 0;
