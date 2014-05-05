@@ -240,7 +240,11 @@
       return io.sockets.emit('update', {
         info: "It's " + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code>'s turn.",
         dice: players[current].dice,
-        players: players
+        players: players,
+        playing: {
+          id: players[current].id,
+          name: players[current].name
+        }
       });
     });
     socket.on('disconnect', function() {
@@ -254,14 +258,22 @@
             io.sockets.emit('update', {
               info: "All players have left the game. Refresh to rejoin.",
               dice: [],
-              players: []
+              players: [],
+              playing: {
+                id: null,
+                name: null
+              }
             });
           } else {
             socket.get('name', function(err, name) {
               return io.sockets.emit('update', {
                 info: "" + name + "&nbsp;<code class='id'>" + (socket.id.slice(0, 6)) + "</code> disconnected. " + players.length + " players remain.",
                 dice: players[current].dice,
-                players: players
+                players: players,
+                playing: {
+                  id: players[current].id,
+                  name: players[current].name
+                }
               });
             });
             if (current > players.length - 2) {
@@ -279,7 +291,7 @@
       return _results;
     });
     socket.on('submitdice', function(data) {
-      var d, d2, ds, i, _i, _j, _k, _l, _m, _ref, _ref1, _ref2, _ref3;
+      var cheater, d, d2, ds, i, _i, _j, _k, _l, _m, _ref, _ref1, _ref2, _ref3;
       d = data.dice.filter(function(el) {
         return el.s;
       });
@@ -291,16 +303,21 @@
       }).join('');
       d2 = getDiceScore(ds);
       if (d2 === 0) {
+        cheater = current;
         current = (current + 1) % players.length;
         socket.emit('turnover');
         io.sockets.emit('update', {
           info: "It's " + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code>'s turn.",
           dice: players[current].dice,
-          players: players
+          players: players,
+          playing: {
+            id: players[current].id,
+            name: players[current].name
+          }
         });
         io.sockets.emit('cheat', {
           id: socket.id,
-          name: players[(current - 1) % players.length].name
+          name: players[cheater].name
         });
         return io.sockets.socket(players[current].id).emit('yourturn', {
           dice: players[current].dice
@@ -329,10 +346,14 @@
           io.sockets.emit('update', {
             info: "" + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code> farkled!",
             dice: players[current].dice,
-            players: players
+            players: players,
+            playing: {
+              id: players[(current + 1) % players.length].id,
+              name: players[(current + 1) % players.length].name
+            }
           });
-          socket.emit('farkle');
           current = (current + 1) % players.length;
+          socket.emit('farkle');
           return io.sockets.socket(players[current].id).emit('yourturn', {
             dice: players[current].dice
           });
@@ -347,7 +368,11 @@
           return io.sockets.emit('update', {
             info: "" + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code> is risking " + players[current].risk + "!",
             dice: players[current].dice,
-            players: players
+            players: players,
+            playing: {
+              id: players[current].id,
+              name: players[current].name
+            }
           });
         }
       }
@@ -388,8 +413,12 @@
         players[current].risk = 0;
         io.sockets.emit('update', {
           info: "" + players[current].name + "&nbsp;<code class='id'>" + (players[current].id.slice(0, 6)) + "</code> banked for " + players[current].score + " points!",
-          dice: players[current].dice,
-          players: players
+          dice: players[(current + 1) % players.length].dice,
+          players: players,
+          playing: {
+            id: players[(current + 1) % players.length].id,
+            name: players[(current + 1) % players.length].name
+          }
         });
       }
       current = (current + 1) % players.length;

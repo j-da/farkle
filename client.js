@@ -38,7 +38,11 @@
       oldValue: 0,
       turnValue: 0,
       players: players,
-      info: ''
+      info: '',
+      playing: {
+        id: null,
+        name: null
+      }
     }
   });
 
@@ -289,7 +293,9 @@
   });
 
   socket.on('started', function(data) {
-    return ractive.set('state', 'game');
+    if (ractive.get('state') !== 'entry') {
+      return ractive.set('state', 'game');
+    }
   });
 
   socket.on('yourturn', function(data) {
@@ -355,6 +361,7 @@
         s: false
       };
     }));
+    ractive.set('playing', data.playing);
     return ractive.set('info', data.info);
   });
 

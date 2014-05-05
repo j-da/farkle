@@ -61,6 +61,7 @@ io.sockets.on 'connection', (socket) ->
       info: "It's #{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code>'s turn."
       dice: players[current].dice
       players: players
+      playing: {id: players[current].id, name: players[current].name}
 
   socket.on 'disconnect', () ->
     for i in [0...players.length]
@@ -72,12 +73,14 @@ io.sockets.on 'connection', (socket) ->
             info: "All players have left the game. Refresh to rejoin."
             dice: []
             players: []
+            playing: {id: null, name: null}
         else
           socket.get 'name', (err, name) ->
             io.sockets.emit 'update', 
               info: "#{name}&nbsp;<code class='id'>#{socket.id.slice(0,6)}</code> disconnected. #{players.length} players remain."
               dice: players[current].dice
               players: players
+              playing: {id: players[current].id, name: players[current].name}
           if current > players.length - 2
             current = 0
             io.sockets.socket(players[current].id).emit 'yourturn', {dice: players[current].dice}
@@ -92,13 +95,15 @@ io.sockets.on 'connection', (socket) ->
     d2 = getDiceScore ds
 
     if d2 is 0
+      cheater = current
       current = (current + 1) % players.length
       socket.emit 'turnover'
       io.sockets.emit 'update', 
         info: "It's #{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code>'s turn."
         dice: players[current].dice
         players: players
-      io.sockets.emit 'cheat', {id: socket.id, name: players[(current - 1) % players.length].name}
+        playing: {id: players[current].id, name: players[current].name}
+      io.sockets.emit 'cheat', {id: socket.id, name: players[cheater].name}
       io.sockets.socket(players[current].id).emit 'yourturn', {dice: players[current].dice}
     else
       for [0...ds.length]
@@ -120,8 +125,9 @@ io.sockets.on 'connection', (socket) ->
           info: "#{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code> farkled!"
           dice: players[current].dice
           players: players
-        socket.emit 'farkle'
+          playing: {id: players[(current + 1) % players.length].id, name: players[(current + 1) % players.length].name}
         current = (current + 1) % players.length
+        socket.emit 'farkle'
         io.sockets.socket(players[current].id).emit 'yourturn', {dice: players[current].dice}
       else
         players[current].risk += d2
@@ -131,6 +137,7 @@ io.sockets.on 'connection', (socket) ->
           info: "#{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code> is risking #{players[current].risk}!"
           dice: players[current].dice
           players: players
+          playing: {id: players[current].id, name: players[current].name}
 
   socket.on 'endturn', (data) ->
     d = data.dice.filter (el) ->
@@ -160,8 +167,9 @@ io.sockets.on 'connection', (socket) ->
 
       io.sockets.emit 'update', 
         info: "#{players[current].name}&nbsp;<code class='id'>#{players[current].id.slice(0,6)}</code> banked for #{players[current].score} points!"
-        dice: players[current].dice
+        dice: players[(current + 1) % players.length].dice
         players: players
+        playing: {id: players[(current + 1) % players.length].id, name: players[(current + 1) % players.length].name}
 
     current = (current + 1) % players.length
     socket.emit 'turnover', {score: players[current].score}

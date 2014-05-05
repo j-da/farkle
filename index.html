@@ -51,7 +51,7 @@
     {{/state}}
     
     {{#state === 'entry'}}
-      <label for='myName'>Hey there fella. What is your name?&emsp;</label>
+      <label for='myName'>Hey there fella. What&#39;s your name?&emsp;</label>
       <input id='myName' on-enter-change='setname' autofocus>
     {{/state}}
     
@@ -82,7 +82,7 @@
       {{/state}}
       {{#state === 'game'}}
         <div class='pure-u-12-24'>
-          <h3>{{#myTurn}}Your{{/myTurn}}{{^myTurn}}Their{{/myTurn}} Turn</h3>
+          <h3>{{#myTurn}}Your{{/myTurn}}{{^myTurn}}{{playing.name}}&#39;s&nbsp;<code class='id'>{{playing.id.slice(0, 6)}}</code>{{/myTurn}} Turn</h3>
           <form class='pure-form pure-form-stacked'>
             <div class='pure-control-group'>
             {{#dice:i}}

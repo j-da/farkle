@@ -15,6 +15,7 @@ ractive = new Ractive {
     turnValue: 0,
     players: players,
     info: '',
+    playing: {id: null, name: null}
   }
 }
 
@@ -82,7 +83,7 @@ socket.on 'newplayer', (data) ->
   players.push (id: data.id, name: data.name, score: 0)
 
 socket.on 'started', (data) ->
-  ractive.set 'state', 'game'
+  if ractive.get('state') isnt 'entry' then ractive.set 'state', 'game'
 
 socket.on 'yourturn', (data) ->
   ractive.set 'dice', data.dice.map (el) ->
@@ -120,6 +121,7 @@ socket.on 'update', (data) ->
     players.push {id: p.id, name: p.name, score: p.score}
   ractive.set 'dice', data.dice.map (el) ->
     return {n: el, s: false}
+  ractive.set 'playing', data.playing
   ractive.set 'info', data.info
 
 socket.on 'gameover', (data) ->
