@@ -77,7 +77,7 @@
       {{#state === 'afterparty'}}
         <div class='pure-u-12-24'>
           <h3>Game Over</h3>
-          <em>The winner is {{players[0].name}}&nbsp;<code class='id'>{{players[0].id}}.</em>
+          <em>The winner is {{players[0].name}}&nbsp;<code class='id'>{{players[0].id.slice(0, 6)}}.</em>
         </div>
       {{/state}}
       {{#state === 'game'}}
@@ -92,8 +92,8 @@
             <div class='pure-control-group'>
               {{#diceValue > 0}}
                 <button type='button' class='pure-button pure-button-primary {{^myTurn}}pure-button-disabled{{/myTurn}}' on-click='submitdice'>Risk for +{{diceValue}}</button>
+                <button type='button' class='pure-button pure-button-primary {{^myTurn}}pure-button-disabled{{/myTurn}}' on-click='endturn'>End turn with {{turnValue}}</button>
               {{/diceValue}}
-              <button type='button' class='pure-button pure-button-primary {{^myTurn}}pure-button-disabled{{/myTurn}}' on-click='endturn'>End turn with {{turnValue}}</button>
             </div>
           </form>
         </div>

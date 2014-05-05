@@ -364,7 +364,7 @@
         return el.n;
       }).join('');
       d2 = getDiceScore(ds);
-      if (false) {
+      if (d2 === 0) {
         io.sockets.emit('cheat', {
           id: socket.id,
           name: players[current].name

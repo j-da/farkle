@@ -140,7 +140,7 @@ io.sockets.on 'connection', (socket) ->
     ds = d.map((el) -> return el.n).join ''
     d2 = getDiceScore ds
 
-    if false
+    if d2 is 0
       io.sockets.emit 'cheat', {id: socket.id, name: players[current].name}
     else
       for [0...ds.length]
