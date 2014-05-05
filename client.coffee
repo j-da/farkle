@@ -85,15 +85,14 @@ socket.on 'started', (data) ->
   ractive.set 'state', 'game'
 
 socket.on 'yourturn', (data) ->
-  console.log data.dice
   ractive.set 'dice', data.dice.map (el) ->
     return {n: el, s: false}
   ractive.set 'myTurn', true
 
 socket.on 'continue', (data) ->
-  console.log data.dice
   ractive.set 'dice', data.dice.map (el) ->
     return {n: el, s: false}
+  ractive.set 'diceValue', 0
   ractive.set 'oldValue', data.risk
   ractive.set 'info', "Your score is #{data.score}, of which you are risking #{data.risk}"
 

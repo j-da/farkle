@@ -293,7 +293,6 @@
   });
 
   socket.on('yourturn', function(data) {
-    console.log(data.dice);
     ractive.set('dice', data.dice.map(function(el) {
       return {
         n: el,
@@ -304,13 +303,13 @@
   });
 
   socket.on('continue', function(data) {
-    console.log(data.dice);
     ractive.set('dice', data.dice.map(function(el) {
       return {
         n: el,
         s: false
       };
     }));
+    ractive.set('diceValue', 0);
     ractive.set('oldValue', data.risk);
     return ractive.set('info', "Your score is " + data.score + ", of which you are risking " + data.risk);
   });
