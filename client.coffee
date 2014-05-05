@@ -58,7 +58,7 @@ updateDice = () ->
   ractive.set 'diceValue', d2
   ractive.set 'turnValue', d2 + ractive.get 'oldValue'
 
-socket = io.connect()
+socket = io.connect(window.location.protocol + '//' + window.location.hostname)
 socket.on 'connect', () ->
   ractive.set 'state', 'entry'
 

@@ -243,7 +243,7 @@
     return ractive.set('turnValue', d2 + ractive.get('oldValue'));
   };
 
-  socket = io.connect();
+  socket = io.connect(window.location.protocol + '//' + window.location.hostname);
 
   socket.on('connect', function() {
     return ractive.set('state', 'entry');
